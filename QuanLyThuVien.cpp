@@ -17,10 +17,10 @@ typedef struct Book {
 typedef struct Borrow {
     int borrowId;
     char borrowName[50];
-    int status; // 0 = dã tr?, 1 = dang mu?n
+    int status;
     int bookId;
     Date borrowDate;
-    Date borrowReturn; // n?u chua tr? thì year = 0
+    Date borrowReturn;
 } Borrow;
 
 int isEmptyString(char s[]){
@@ -72,7 +72,6 @@ int validDate(Date d){
     return 1;
 }
 
-// return 1 if a > b, 0 if equal, -1 if a < b
 int compareDate(Date a, Date b){
     if(a.year != b.year) return (a.year > b.year) ? 1 : -1;
     if(a.month != b.month) return (a.month > b.month) ? 1 : -1;
@@ -176,7 +175,6 @@ void menu(){
     printf("======================================\n");
 }
 
-// helper find index
 int findBookIndexById(Book books[], int n, int id){
     for(int i = 0; i < n; i++){
         if(books[i].bookId == id) return i;
@@ -298,7 +296,7 @@ void addBorrow(Borrow *b, Borrow borrows[], int m, Book books[], int n){
     while(1){
         printf("nhap ten nguoi muon: ");
         fgets(b->borrowName, sizeof(b->borrowName), stdin);
-        b->borrowName[strcspn(b->borrowName, "\n")] = '\0';
+        b->borrowName[strcspn(b->borrowName, "\n")] = '\null';
         if(isEmptyString(b->borrowName)){
             printf("Ten nguoi muon khong duoc de trong\n");
             continue;
@@ -322,8 +320,9 @@ void addBorrow(Borrow *b, Borrow borrows[], int m, Book books[], int n){
         break;
     }
     b->status = 1;
-    b->borrowReturn.day = 0; b->borrowReturn.month = 0; b->borrowReturn.year = 0;
-    // gi?m s? lu?ng sách
+    b->borrowReturn.day = 0;
+    b->borrowReturn.month = 0;
+    b->borrowReturn.year = 0;
     int bookIdx = findBookIndexById(books, n, b->bookId);
     if(bookIdx != -1) books[bookIdx].quantity -= 1;
 }
@@ -371,9 +370,9 @@ void returnBook(Borrow borrows[], int m, Book books[], int n){
     }
     borrows[idx].borrowReturn = rt;
     borrows[idx].status = 0;
-    // tang s? lu?ng sách
     int bookIdx = findBookIndexById(books, n, borrows[idx].bookId);
-    if(bookIdx != -1) books[bookIdx].quantity += 1;
+    if(bookIdx != -1)
+        books[bookIdx].quantity += 1;
     printf("Tra sach thanh cong\n");
 }
 
@@ -510,4 +509,3 @@ int main(){
     }
     return 0;
 }
-
